@@ -22,7 +22,7 @@ const Login = () => {
           </span>
         </div>
       </div>
-
+      {/* login form */}
       <LoginForm />
 
       <p className="mt-4 text-center text-sm">
