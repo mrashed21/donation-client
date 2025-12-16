@@ -26,7 +26,7 @@ const Login = () => {
       <LoginForm />
 
       <p className="mt-4 text-center text-sm">
-        Don&apos;t have an account?{" "}
+        Don&apos;t have an account?
         <Link href="/auth/register" className="font-medium underline">
           Register
         </Link>
