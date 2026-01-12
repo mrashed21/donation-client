@@ -1,3 +1,4 @@
+import Link from "next/link";
 import GoogleAuth from "./GoogleAuth";
 import RegisterForm from "./RegisterForm";
 
@@ -26,6 +27,12 @@ const Register = () => {
         </div>
 
         <RegisterForm />
+        <p className="mt-4 text-center text-sm">
+          Already have an account?{" "}
+          <Link href="/auth/login" className="font-medium underline">
+            Login
+          </Link>
+        </p>
       </div>
     </section>
   );
