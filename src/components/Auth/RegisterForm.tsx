@@ -31,6 +31,27 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+const resendVerification = async (email: string) => {
+  try {
+    const res = await fetch(`${AUTH_URL}/api/auth/send-verification-email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      toast.error(result?.message || "Failed to resend email");
+      return;
+    }
+
+    toast.success("Verification email sent again. Please check your inbox.");
+  } catch {
+    toast.error("Something went wrong");
+  }
+};
+
 const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -127,6 +148,14 @@ const RegisterForm = () => {
       <Button type="submit" className="w-full" disabled={isSubmitting}>
         {isSubmitting ? "Creating account..." : "Create account"}
       </Button>
+
+      <button
+        type="button"
+        onClick={() => resendVerification(watch("email"))}
+        className="text-sm underline text-primary"
+      >
+        Resend verification email
+      </button>
     </form>
   );
 };
