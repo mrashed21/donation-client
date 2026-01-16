@@ -1,11 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AUTH_URL } from "@/utils/BaseUrl";
+import { authClient } from "@/lib/auth-client";
 
 const GoogleAuth = () => {
-  const handleGoogleLogin = () => {
-    window.location.href = `${AUTH_URL}/api/auth/sign-in/google`;
+  const handleGoogleLogin = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "http://localhost:3000",
+    });
   };
 
   return (
