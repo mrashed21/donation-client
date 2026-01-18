@@ -1,10 +1,9 @@
+import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import GoogleAuth from "./GoogleAuth";
 import LoginForm from "./LoginForm";
-import { authClient } from "@/lib/auth-client";
 
 const Login = () => {
-  
   const session = authClient.getSession();
   console.log(session);
   return (

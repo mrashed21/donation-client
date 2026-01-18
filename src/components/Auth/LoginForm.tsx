@@ -58,7 +58,7 @@ const LoginForm = () => {
       }
 
       toast.success("Login successful");
-      router.push("/"); // or /dashboard
+      router.push("/user");
     } catch (error) {
       toast.error("Something went wrong");
     }
