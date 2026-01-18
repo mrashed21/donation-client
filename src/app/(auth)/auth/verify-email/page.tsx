@@ -19,7 +19,7 @@ const VerifyEmailPage = () => {
 
       try {
         const res = await fetch(
-          `${AUTH_URL}/api/auth/verify-email?token=${token}`,
+          `${AUTH_URL}/verify-email?token=${token}`,
           {
             method: "GET",
             credentials: "include",

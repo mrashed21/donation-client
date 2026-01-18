@@ -37,7 +37,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const res = await fetch(`${AUTH_URL}/api/auth/sign-in/email`, {
+      const res = await fetch(`${AUTH_URL}/sign-in/email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

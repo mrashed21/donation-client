@@ -33,7 +33,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const resendVerification = async (email: string) => {
   try {
-    const res = await fetch(`${AUTH_URL}/api/auth/send-verification-email`, {
+    const res = await fetch(`${AUTH_URL}/send-verification-email`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
@@ -68,7 +68,7 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
-      const res = await fetch(`${AUTH_URL}/api/auth/sign-up/email`, {
+      const res = await fetch(`${AUTH_URL}/sign-up/email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
