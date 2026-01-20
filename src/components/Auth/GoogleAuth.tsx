@@ -11,9 +11,6 @@ const GoogleAuth = () => {
     });
   };
 
-  const session = authClient.getSession();
-  console.log(session);
-
   return (
     <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
       Continue with Google

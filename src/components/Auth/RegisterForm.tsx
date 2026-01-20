@@ -82,7 +82,6 @@ const RegisterForm = () => {
       if (!res.ok) {
         toast.error("Something went wrong! try again");
       }
-      console.log(result);
     } catch (error) {
       console.error(error);
     }

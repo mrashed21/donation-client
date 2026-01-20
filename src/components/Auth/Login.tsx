@@ -1,11 +1,9 @@
-import { authClient } from "@/lib/auth-client";
+"use client";
 import Link from "next/link";
 import GoogleAuth from "./GoogleAuth";
 import LoginForm from "./LoginForm";
 
 const Login = () => {
-  const session = authClient.getSession();
-  console.log(session);
   return (
     <div className="w-full max-w-md rounded-xl border bg-background p-6 shadow-sm">
       <div className="mb-6 text-center">

@@ -1,6 +1,7 @@
 "use client";
 
-import { Menu, Search, User } from "lucide-react";
+import { Menu, Search } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import Container from "@/components/container/container";
@@ -18,26 +19,23 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { authClient } from "@/lib/auth-client";
 
-type NavItem = {
-  label: string;
-  href: string;
+type User = {
+  name?: string;
+  email?: string;
+  image?: string | null;
 };
 
-const navItems: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "About", href: "/about-us" },
-  { label: "Contact", href: "/contact" },
-];
-
 const Navbar = () => {
-  const isAuthenticated = false;
+  const { data } = authClient.useSession();
+  const user: User | null = data?.user ?? null;
+  const isAuthenticated = !!user;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
       <Container>
-        <nav className=" flex h-16 items-center justify-between px-4">
+        <nav className="flex h-16 items-center justify-between px-4">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold">
             BrandLogo
@@ -46,48 +44,61 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList className="gap-6">
-              {navItems.map((item) => (
-                <NavigationMenuItem key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-sm font-medium text-muted-foreground hover:text-primary"
-                  >
-                    {item.label}
-                  </Link>
-                </NavigationMenuItem>
-              ))}
+              <NavigationMenuItem>
+                <Link href="/">Home</Link>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
           {/* Right Section */}
           <div className="hidden md:flex items-center gap-4">
-            {/* Search (Optional) */}
             <div className="relative">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Search..." className="pl-8 w-48" />
             </div>
 
-            {/* Auth */}
             {!isAuthenticated ? (
               <>
-                <Link href={"/auth/login"}>
+                <Link href="/auth/login">
                   <Button variant="ghost">Login</Button>
                 </Link>
-                <Link href={"/auth/register"}>
+                <Link href="/auth/register">
                   <Button>Register</Button>
                 </Link>
               </>
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <User />
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 px-2"
+                  >
+                    {user?.image ? (
+                      <Image
+                        src={user.image}
+                        alt={user.name ?? "User"}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    ) : (
+                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
+                        {user?.name?.charAt(0)?.toUpperCase()}
+                      </div>
+                    )}
+                    <span className="text-sm font-medium">{user?.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <Link href={"/user"}>
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                  <DropdownMenuItem className="text-red-500">
+                  <DropdownMenuItem
+                    className="text-red-500"
+                    onClick={() => authClient.signOut()}
+                  >
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -95,7 +106,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu */}
+          {/* Mobile */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="md:hidden">
@@ -104,43 +115,29 @@ const Navbar = () => {
             </SheetTrigger>
 
             <SheetContent side="right" className="w-72">
-              <div className="flex flex-col gap-6">
-                <Link href="/" className="text-lg font-bold">
-                  BrandLogo
-                </Link>
-
-                {/* Mobile Nav */}
-                <nav className="flex flex-col gap-4">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="text-sm font-medium"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </nav>
-
-                {/* Mobile Search */}
-                <Input placeholder="Search..." />
-
-                {/* Mobile Auth */}
-                {!isAuthenticated ? (
-                  <div className="flex gap-2">
-                    <Button variant="outline" className="w-full">
-                      Login
-                    </Button>
-                    <Button className="w-full">Register</Button>
+              {isAuthenticated && (
+                <div className="flex items-center gap-3 mb-6">
+                  {user?.image ? (
+                    <Image
+                      src={user.image}
+                      alt={user.name ?? "User"}
+                      width={40}
+                      height={40}
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center font-semibold">
+                      {user?.name?.charAt(0)?.toUpperCase()}
+                    </div>
+                  )}
+                  <div>
+                    <p className="text-sm font-semibold">{user?.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {user?.email}
+                    </p>
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    <Button variant="ghost">Profile</Button>
-                    <Button variant="ghost">Dashboard</Button>
-                    <Button variant="destructive">Logout</Button>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </SheetContent>
           </Sheet>
         </nav>
