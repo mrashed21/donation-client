@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import QueryProvider from "@/provider/QueryProvider";
+import "bd-number-validator/react/style.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
