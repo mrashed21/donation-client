@@ -1,27 +1,44 @@
 "use client";
 
 import { useGetme } from "@/api/user/user.api";
-import { User } from "@/types/user.types";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
-
-interface UserProfileProps {
-  user: User;
-}
+import ProfileSection from "./ProfileSection";
 
 const UserProfile = () => {
   const [userUpdateModalOpen, setUserUpdateModalOpen] = useState(false);
   const { data, isLoading, refetch } = useGetme();
+
   const user = data?.data;
-  console.log("user form api:", user);
+
   useEffect(() => {
-    if (user?.profile_completed === false) {
+    if (user && user.profile_completed === false) {
       setUserUpdateModalOpen(true);
     }
-  }, [user?.profile_completed]);
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <section className="max-w-3xl">
+        <Skeleton className="h-40 w-full rounded-lg" />
+      </section>
+    );
+  }
+
+  if (!user) return null;
 
   return (
-    <section>
-      <p>{user?.name}</p>
+    <section className="space-y-6">
+      <ProfileSection profile={user} />
+
+      
+      {/* {userUpdateModalOpen && (
+        <UserUpdateModal
+          open={userUpdateModalOpen}
+          onClose={() => setUserUpdateModalOpen(false)}
+          refetch={refetch}
+        />
+      )} */}
     </section>
   );
 };
