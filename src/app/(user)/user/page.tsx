@@ -1,14 +1,12 @@
-import UserProfile from "@/components/user/profile/UserProfile";
 
-const UserProfilePage = async () => {
-  // const { data } = await userService.getSession();
-
+const UserDashboardPage = async () => {
+ 
   return (
     <section>
-      <UserProfile />
-      {/* <UserProfile user={data?.user} /> */}
+  
+     <h2>Dashboad</h2>
     </section>
   );
 };
 
-export default UserProfilePage;
+export default UserDashboardPage;

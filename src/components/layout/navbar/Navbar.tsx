@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,21 +12,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { authClient } from "@/lib/auth-client";
 
+/* ------------------ Types ------------------ */
 type User = {
   name?: string;
   email?: string;
   image?: string | null;
 };
 
+/* ------------------ Nav Items ------------------ */
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Request for Blood", href: "/request-blood" },
+  { label: "Donors", href: "/donors" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+/* ------------------ Component ------------------ */
 const Navbar = () => {
   const { data } = authClient.useSession();
   const user: User | null = data?.user ?? null;
@@ -37,25 +48,29 @@ const Navbar = () => {
       <Container>
         <nav className="flex h-16 items-center justify-between px-4">
           {/* Logo */}
-          <Link href="/" className="text-xl font-bold">
-            BrandLogo
+          <Link href="/" className="text-xl font-bold text-primary">
+            BloodCare
           </Link>
 
-          {/* Desktop Menu */}
+          {/* Desktop Navigation */}
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList className="gap-6">
-              <NavigationMenuItem>
-                <Link href="/">Home</Link>
-              </NavigationMenuItem>
+              {navItems.map((item) => (
+                <NavigationMenuItem key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm font-medium transition-colors hover:text-primary"
+                  >
+                    {item.label}
+                  </Link>
+                </NavigationMenuItem>
+              ))}
             </NavigationMenuList>
           </NavigationMenu>
 
-          {/* Right Section */}
+          {/* Right Section (Desktop) */}
           <div className="hidden md:flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search..." className="pl-8 w-48" />
-            </div>
+            <ThemeToggle />
 
             {!isAuthenticated ? (
               <>
@@ -86,15 +101,19 @@ const Navbar = () => {
                         {user?.name?.charAt(0)?.toUpperCase()}
                       </div>
                     )}
-                    <span className="text-sm font-medium">{user?.name}</span>
+                    <span className="text-sm font-medium">
+                      {user?.name}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end">
-                  <Link href={"/user"}>
+                  <Link href="/user">
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                   </Link>
-                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  <Link href="/dashboard">
+                    <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  </Link>
                   <DropdownMenuItem
                     className="text-red-500"
                     onClick={() => authClient.signOut()}
@@ -106,15 +125,20 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile */}
+          {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+              >
                 <Menu />
               </Button>
             </SheetTrigger>
 
             <SheetContent side="right" className="w-72">
+              {/* User Info */}
               {isAuthenticated && (
                 <div className="flex items-center gap-3 mb-6">
                   {user?.image ? (
@@ -131,13 +155,56 @@ const Navbar = () => {
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-semibold">{user?.name}</p>
+                    <p className="text-sm font-semibold">
+                      {user?.name}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {user?.email}
                     </p>
                   </div>
                 </div>
               )}
+
+              {/* Mobile Nav Links */}
+              <nav className="flex flex-col gap-4">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="text-sm font-medium transition-colors hover:text-primary"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+
+                <div className="pt-4 border-t">
+                  {!isAuthenticated ? (
+                    <div className="flex flex-col gap-2">
+                      <Link href="/auth/login">
+                        <Button
+                          variant="outline"
+                          className="w-full"
+                        >
+                          Login
+                        </Button>
+                      </Link>
+                      <Link href="/auth/register">
+                        <Button className="w-full">
+                          Register
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="destructive"
+                      className="w-full"
+                      onClick={() => authClient.signOut()}
+                    >
+                      Logout
+                    </Button>
+                  )}
+                </div>
+              </nav>
             </SheetContent>
           </Sheet>
         </nav>

@@ -7,7 +7,7 @@ type ContainerProps = {
 
 const Container = ({ children, className = "" }: ContainerProps) => {
   return (
-    <section className={`max-w-360 mx-auto  ${className}`}>{children}</section>
+    <section className={`max-w-400 mx-auto  ${className}`}>{children}</section>
   );
 };
 
