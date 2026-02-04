@@ -101,9 +101,7 @@ const Navbar = () => {
                         {user?.name?.charAt(0)?.toUpperCase()}
                       </div>
                     )}
-                    <span className="text-sm font-medium">
-                      {user?.name}
-                    </span>
+                    <span className="text-sm font-medium">{user?.name}</span>
                   </Button>
                 </DropdownMenuTrigger>
 
@@ -128,11 +126,7 @@ const Navbar = () => {
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden"
-              >
+              <Button variant="ghost" size="icon" className="md:hidden">
                 <Menu />
               </Button>
             </SheetTrigger>
@@ -155,9 +149,7 @@ const Navbar = () => {
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-semibold">
-                      {user?.name}
-                    </p>
+                    <p className="text-sm font-semibold">{user?.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {user?.email}
                     </p>
@@ -181,17 +173,12 @@ const Navbar = () => {
                   {!isAuthenticated ? (
                     <div className="flex flex-col gap-2">
                       <Link href="/auth/login">
-                        <Button
-                          variant="outline"
-                          className="w-full"
-                        >
+                        <Button variant="outline" className="w-full">
                           Login
                         </Button>
                       </Link>
                       <Link href="/auth/register">
-                        <Button className="w-full">
-                          Register
-                        </Button>
+                        <Button className="w-full">Register</Button>
                       </Link>
                     </div>
                   ) : (
