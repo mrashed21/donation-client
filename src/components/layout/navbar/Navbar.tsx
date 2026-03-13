@@ -21,14 +21,14 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { authClient } from "@/lib/auth-client";
 
-/* ------------------ Types ------------------ */
+/*  Types  */
 type User = {
   name?: string;
   email?: string;
   image?: string | null;
 };
 
-/* ------------------ Nav Items ------------------ */
+/*  Nav Items  */
 const navItems = [
   { label: "Home", href: "/" },
   { label: "Request for Blood", href: "/request-blood" },
@@ -37,7 +37,7 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-/* ------------------ Component ------------------ */
+/*  Component  */
 const Navbar = () => {
   const { data } = authClient.useSession();
   const user: User | null = data?.user ?? null;
