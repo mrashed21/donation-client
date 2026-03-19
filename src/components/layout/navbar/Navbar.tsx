@@ -178,7 +178,7 @@ const Navbar = () => {
                         </Button>
                       </Link>
                       <Link href="/auth/register">
-                        <Button className="w-full">Register</Button>
+                        <Button className="w-full"> Register </Button>
                       </Link>
                     </div>
                   ) : (
